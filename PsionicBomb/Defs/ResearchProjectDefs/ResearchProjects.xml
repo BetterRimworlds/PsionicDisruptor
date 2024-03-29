@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+    <ResearchProjectDef>
+        <defName>BRW_PsionicBatteries</defName>
+        <label>Psionic Batteries</label>
+        <description>Learn to store and harness psionic energy from your Psionically-Sensitive citizens.
+        
+www.glitterworlds.dev</description>
+        <baseCost>5000</baseCost>
+        <techLevel>Spacer</techLevel>
+        <researchViewX>0</researchViewX>
+        <researchViewY>1</researchViewY>
+        <requiredResearchFacilities>
+            <li>MultiAnalyzer</li>
+        </requiredResearchFacilities>
+        <tab>GlitterWorlds</tab>
+    </ResearchProjectDef>
+    <ResearchProjectDef>
+        <defName>BRW_PsionicBomb</defName>
+        <label>Psionic Bomb</label>
+        <description>Creates an ultra-devstating psionic blast that does terrible things to every human and animal who is not psychically numb or deaf,
+or protected in some way.
+
+www.glitterworlds.dev</description>
+        <baseCost>6000</baseCost>
+        <techLevel>Spacer</techLevel>
+        <researchViewX>0</researchViewX>
+        <researchViewY>3</researchViewY>
+        <requiredResearchFacilities>
+            <li>MultiAnalyzer</li>
+        </requiredResearchFacilities>
+        <prerequisites>
+            <li>AdvancedFabrication</li>
+            <li>BRW_PsionicBatteries</li>
+        </prerequisites>
+        <tab>GlitterWorlds</tab>
+    </ResearchProjectDef>
+    <ResearchProjectDef>
+        <defName>PsionicBlastProtect</defName>
+        <label>Psionic Blast Protection</label>
+        <description>Research a defensive protection against the effects of the Psionic Bomb.
+
+www.glitterworlds.dev</description>
+        <baseCost>10000</baseCost>
+        <techLevel>Spacer</techLevel>
+        <researchViewX>1</researchViewX>
+        <researchViewY>1</researchViewY>
+        <requiredResearchFacilities>
+            <li>MultiAnalyzer</li>
+        </requiredResearchFacilities>
+        <prerequisites>
+            <li>AdvancedFabrication</li>
+            <li>BRW_PsionicBomb</li>
+        </prerequisites>
+        <tab>GlitterWorlds</tab>
+    </ResearchProjectDef>
+</Defs>

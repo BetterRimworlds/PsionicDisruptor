@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+    <ThingDef Name="BuildingBase" Abstract="True">
+        <category>Building</category>
+        <soundImpactDefault>BulletImpact_Metal</soundImpactDefault>
+        <selectable>true</selectable>
+        <drawerType>MapMeshAndRealTime</drawerType>
+        <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
+        <repairEffect>Repair</repairEffect>
+    </ThingDef>
+
+    <ThingDef Class="BetterRimworlds.PsionicBomb.PsionicBombThingDef" ParentName="BuildingBase">
+        <defName>BRW_PsionicBombCaster</defName>
+        <label>Psionic Bomb Caster</label>
+        <thingClass>BetterRimworlds.PsionicBomb.Building_PsionicBomb</thingClass>
+        <graphicData>
+            <texPath>Things/Buildings/PsionicBomb</texPath>
+            <graphicClass>Graphic_Single</graphicClass>
+            <drawSize>(3,3)</drawSize>
+        </graphicData>
+        <altitudeLayer>Building</altitudeLayer>
+        <passability>Impassable</passability>
+        <castEdgeShadows>true</castEdgeShadows>
+        <fillPercent>1</fillPercent>
+        <specialDisplayRadius>3</specialDisplayRadius>
+        <tickerType>Rare</tickerType>
+        <statBases>
+            <WorkToBuild>25000</WorkToBuild>
+            <MaxHitPoints>1000</MaxHitPoints>
+            <Flammability>0.0</Flammability>
+        </statBases>
+        <description>Psionic Bomb Caster</description>
+        <researchPrerequisites>
+            <li>BRW_PsionicBomb</li>
+        </researchPrerequisites>
+        <comps>
+            <li Class="CompProperties_Power">
+                <compClass>CompPowerTrader</compClass>
+                <shortCircuitInRain>false</shortCircuitInRain>
+                <basePowerConsumption>1000</basePowerConsumption>
+            </li>
+<!--            <li Class="CompProperties_Flickable"/>-->
+        </comps>
+        <size>(3,3)</size>
+        <costList>
+            <Steel>2000</Steel>
+            <Uranium>500</Uranium>
+            <Plasteel>2000</Plasteel>
+            <Gold>1000</Gold>
+<!--            <AIPersonaCore>1</AIPersonaCore>-->
+            <ComponentIndustrial>5</ComponentIndustrial>
+            <ComponentSpacer>35</ComponentSpacer>
+            <Silver>10000</Silver>
+        </costList>
+        <constructionSkillPrerequisite>15</constructionSkillPrerequisite>
+        <hasInteractionCell>False</hasInteractionCell>
+        <terrainAffordanceNeeded>Heavy</terrainAffordanceNeeded>
+        <designationCategory>Security</designationCategory>
+        <staticSunShadowHeight>0.75</staticSunShadowHeight>
+        <leaveResourcesWhenKilled>true</leaveResourcesWhenKilled>
+        <placeWorkers>
+            <li>BetterRimworlds.PsionicBomb.PlaceWorker_OnlyOnePsionicBomb</li>
+        </placeWorkers>
+    </ThingDef>
+</Defs>
