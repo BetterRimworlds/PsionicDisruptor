@@ -163,7 +163,11 @@ namespace BetterRimworlds.PsionicBomb
                     this.power.powerOutputInt = 0;
                     chargeSpeed = 0;
                     this.updatePowerDrain();
+                    #if !RIMWORLD15
                     Find.CurrentMap.mapDrawer.MapMeshDirty(Position, MapMeshFlag.Things, true, false);
+                    #else
+                    Find.CurrentMap.mapDrawer.MapMeshDirty(Position, MapMeshFlagDefOf.Things, true, false);
+                    #endif
                 }
 
                 if (this.Warned == 2)
@@ -177,7 +181,11 @@ namespace BetterRimworlds.PsionicBomb
                     this.currentCapacitorCharge = 0;
 
                     PsionicBlast.DoPsionicBlast();
+                #if !RIMWORLD15
                     Find.CurrentMap.mapDrawer.MapMeshDirty(Position, MapMeshFlag.Things, true, false);
+                #else
+                    Find.CurrentMap.mapDrawer.MapMeshDirty(Position, MapMeshFlagDefOf.Things, true, false);
+                #endif
                     return;
                 }
             }
