@@ -24,12 +24,13 @@
         <fillPercent>1</fillPercent>
         <specialDisplayRadius>3</specialDisplayRadius>
         <tickerType>Rare</tickerType>
+<!--        <tickerType>Normal</tickerType>-->
         <statBases>
             <WorkToBuild>25000</WorkToBuild>
             <MaxHitPoints>1000</MaxHitPoints>
             <Flammability>0.0</Flammability>
         </statBases>
-        <description>Psionic Bomb Caster</description>
+        <description>Psionic Disrupter</description>
         <researchPrerequisites>
             <li>BRW_PsionicBomb</li>
         </researchPrerequisites>
@@ -52,7 +53,7 @@
             <ComponentSpacer>35</ComponentSpacer>
             <Silver>10000</Silver>
         </costList>
-        <constructionSkillPrerequisite>15</constructionSkillPrerequisite>
+        <constructionSkillPrerequisite>12</constructionSkillPrerequisite>
         <hasInteractionCell>False</hasInteractionCell>
         <terrainAffordanceNeeded>Heavy</terrainAffordanceNeeded>
         <designationCategory>Security</designationCategory>

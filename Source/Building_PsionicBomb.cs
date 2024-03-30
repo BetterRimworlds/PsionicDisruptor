@@ -22,12 +22,10 @@ namespace BetterRimworlds.PsionicBomb
     [StaticConstructorOnStartup]
     class Building_PsionicBomb : Building
     {
-        const int ADDITION_DISTANCE = 3;
-
         public int Warned = 0;
 
         protected static Texture2D UI_DETONATE;
- 
+
         static Graphic graphicActive;
         static Graphic graphicInactive;
 
@@ -38,6 +36,7 @@ namespace BetterRimworlds.PsionicBomb
         int currentCapacitorCharge = 1000;
         int requiredCapacitorCharge = 20000;
         int chargeSpeed = 1;
+        private Graphic currentGraphic;
 
         protected Map currentMap;
 
@@ -46,7 +45,7 @@ namespace BetterRimworlds.PsionicBomb
             UI_DETONATE = ContentFinder<Texture2D>.Get("UI/Detonate", true);
 
         #if RIMWORLD12
-            GraphicRequest requestActive = new GraphicRequest(Type.GetType("Graphic_Single"), "Things/Buildings/PsionicBomb-Active",   ShaderDatabase.DefaultShader, new Vector2(3, 3), Color.white, Color.white, new GraphicData(), 0, null);
+            GraphicRequest requestActive = new GraphicRequest(Type.GetType("Graphic_Single"), "Things/Buildings/PsionicBomb-Active", ShaderDatabase.DefaultShader, new Vector2(3, 3), Color.white, Color.white, new GraphicData(), 0, null);
             GraphicRequest requestInactive = new GraphicRequest(Type.GetType("Graphic_Single"), "Things/Buildings/PsionicBomb", ShaderDatabase.DefaultShader, new Vector2(3, 3), Color.white, Color.white, new GraphicData(), 0, null);
         #else
             GraphicRequest requestActive = new GraphicRequest(Type.GetType("Graphic_Single"), "Things/Buildings/PsionicBomb-Active",   ShaderDatabase.DefaultShader, new Vector2(3, 3), Color.white, Color.white, new GraphicData(), 0, null, null);
@@ -63,8 +62,8 @@ namespace BetterRimworlds.PsionicBomb
         public override void SpawnSetup(Map map, bool respawningAfterLoad)
         {
             this.currentMap = map;
-
             this.power = base.GetComp<CompPowerTrader>();
+            this.currentGraphic = this.fullyCharged ?  Building_PsionicBomb.graphicActive : Building_PsionicBomb.graphicInactive;
 
             base.SpawnSetup(map, respawningAfterLoad);
         }
@@ -107,13 +106,7 @@ namespace BetterRimworlds.PsionicBomb
 
         #region Commands
 
-        private bool fullyCharged
-        {
-            get
-            {
-                return (this.currentCapacitorCharge >= this.requiredCapacitorCharge);
-            }
-        }
+        private bool fullyCharged => (this.currentCapacitorCharge >= this.requiredCapacitorCharge);
 
         protected IEnumerable<Gizmo> GetDefaultGizmos()
         {
@@ -145,6 +138,18 @@ namespace BetterRimworlds.PsionicBomb
             // +57 319-666-8030
         }
 
+        public override void Tick()
+        {
+            base.Tick();
+            // this.currentGraphic = this.fullyCharged ?  Building_PsionicBomb.graphicActive : Building_PsionicBomb.graphicInactive;
+
+            if (Find.TickManager.TicksGame % 250 == 0)
+            {
+                Messages.Message("Is fully charged? " + this.fullyCharged, MessageTypeDefOf.NeutralEvent);
+                this.TickRare();
+            }
+        }
+
         public override void TickRare()
         {
             base.TickRare();
@@ -152,9 +157,15 @@ namespace BetterRimworlds.PsionicBomb
             var isSolarFlare = this.detectSolarFlare();
             if (this.fullyCharged == true)
             {
-                this.power.powerOutputInt = 0;
-                // chargeSpeed = 0;
-                this.updatePowerDrain();
+                if (chargeSpeed != 0)
+                {
+                    this.currentCapacitorCharge = this.requiredCapacitorCharge;
+                    this.power.powerOutputInt = 0;
+                    chargeSpeed = 0;
+                    this.updatePowerDrain();
+                    Find.CurrentMap.mapDrawer.MapMeshDirty(Position, MapMeshFlag.Things, true, false);
+                }
+
                 if (this.Warned == 2)
                 {
                     this.Warned += 1;
@@ -166,6 +177,7 @@ namespace BetterRimworlds.PsionicBomb
                     this.currentCapacitorCharge = 0;
 
                     PsionicBlast.DoPsionicBlast();
+                    Find.CurrentMap.mapDrawer.MapMeshDirty(Position, MapMeshFlag.Things, true, false);
                     return;
                 }
             }
@@ -208,7 +220,7 @@ namespace BetterRimworlds.PsionicBomb
                     this.isPowerInited = true;
                     this.power.PowerOutput = -1000;
                 }
-                
+
             }
         }
 
@@ -233,10 +245,10 @@ namespace BetterRimworlds.PsionicBomb
             mote.Scale = 180f;
             mote.rotationRate = Rand.Range(-3f, 3f);
             mote.exactPosition = cell.ToVector3Shifted() + new Vector3(Rand.Value - 0.5f, 0f, Rand.Value - 0.5f);
-            
+
             mote.instanceColor = new Color(0, 120/255.0f, 1.0f);
             // moteThrown.instanceColor = new Color(0.368f, 0f, 1f);
-            
+
             GenSpawn.Spawn((Thing) mote, cell, this.Map);
             // var cell = this.Position;
         //     Mote newThing = (Mote) ThingMaker.MakeThing(ThingDefOf.Mote_PowerBeam);
@@ -252,22 +264,25 @@ namespace BetterRimworlds.PsionicBomb
         }
 
         #endregion
-        
+
+        #region Graphics-text
         public override Graphic Graphic
         {
             get
             {
+                // return this.currentGraphic;
                 //if (this.fullyCharged == true)
+                // Log.Error("Current charge: " + this.currentCapacitorCharge);
+                // return this.currentGraphic;
                 if (this.currentCapacitorCharge < 20000f)
                 {
                     return Building_PsionicBomb.graphicInactive;
                 }
-                else
-                {
-                    return Building_PsionicBomb.graphicActive;
-                }
+
+                return Building_PsionicBomb.graphicActive;
             }
         }
+        #endregion
 
         public bool UpdateRequiredPower(float extraPower)
         {
