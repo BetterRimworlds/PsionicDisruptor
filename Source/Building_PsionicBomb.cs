@@ -22,19 +22,19 @@ namespace BetterRimworlds.PsionicBomb
     [StaticConstructorOnStartup]
     class Building_PsionicBomb : Building
     {
-        public int Warned = 0;
+        private int? Countdown = null;
+        private int quarterLongTick = 0;
 
         protected static Texture2D UI_DETONATE;
 
         static Graphic graphicActive;
         static Graphic graphicInactive;
 
-        private bool isPowerInited = true;
         CompPowerTrader power;
         // CompProperties_Power powerProps;
 
         int currentCapacitorCharge = 1000;
-        int requiredCapacitorCharge = 20000;
+        readonly int requiredCapacitorCharge = 20000;
         int chargeSpeed = 1;
         private Graphic currentGraphic;
 
@@ -79,9 +79,9 @@ namespace BetterRimworlds.PsionicBomb
         // Saving game
         public override void ExposeData()
         {
-            Scribe_Values.Look<int>(ref currentCapacitorCharge, "currentCapacitorCharge");
-            // Scribe_Values.Look<int>(ref requiredCapacitorCharge, "requiredCapacitorCharge");
-            Scribe_Values.Look<int>(ref chargeSpeed, "chargeSpeed");
+            Scribe_Values.Look<int>(ref currentCapacitorCharge, "currentCapacitorCharge", 0);
+            Scribe_Values.Look<int?>(ref Countdown, "countdown", null);
+            Scribe_Values.Look<int>(ref chargeSpeed, "chargeSpeed", 1);
 
             base.ExposeData();
         }
@@ -125,7 +125,7 @@ namespace BetterRimworlds.PsionicBomb
             {
                 Command_Action act = new Command_Action();
                 //act.action = () => Designator_Deconstruct.DesignateDeconstruct(this);
-                act.action = this.DoPsionicBlast;
+                act.action = this.InitiatePsionicBlast;
                 act.icon = UI_DETONATE;
                 act.defaultLabel = "Detonate";
                 act.defaultDesc = "Detonate";
@@ -152,96 +152,117 @@ namespace BetterRimworlds.PsionicBomb
 
         public override void TickRare()
         {
+            Log.Warning("===== PSIONIC COUNTDOWN: " + this.Countdown);
             base.TickRare();
-
             var isSolarFlare = this.detectSolarFlare();
-            if (this.fullyCharged == true)
+
+            // Initialize charge speed if not charging and not fully charged
+            if (this.chargeSpeed == 0 && !this.fullyCharged) this.chargeSpeed = 1;
+
+            if (this.fullyCharged)
             {
-                if (chargeSpeed != 0)
+                // Reset current charge if needed and update power drain
+                if (this.chargeSpeed != 0)
                 {
                     this.currentCapacitorCharge = this.requiredCapacitorCharge;
                     this.power.powerOutputInt = 0;
-                    chargeSpeed = 0;
+                    this.chargeSpeed = 0;
                     this.updatePowerDrain();
-                    #if !RIMWORLD15
-                    Find.CurrentMap.mapDrawer.MapMeshDirty(Position, MapMeshFlag.Things, true, false);
-                    #else
-                    Find.CurrentMap.mapDrawer.MapMeshDirty(Position, MapMeshFlagDefOf.Things, true, false);
-                    #endif
+                    UpdateMapMeshDirty();
                 }
 
-                if (this.Warned == 2)
+                if (this.Countdown == null)
                 {
-                    this.Warned += 1;
-                    this.DoBlastVisual();
-                    return;
-                } else if (this.Warned == 3)
-                {
-                    this.Warned = 0;
-                    this.currentCapacitorCharge = 0;
-
-                    PsionicBlast.DoPsionicBlast();
-                #if !RIMWORLD15
-                    Find.CurrentMap.mapDrawer.MapMeshDirty(Position, MapMeshFlag.Things, true, false);
-                #else
-                    Find.CurrentMap.mapDrawer.MapMeshDirty(Position, MapMeshFlagDefOf.Things, true, false);
-                #endif
                     return;
                 }
-            }
 
-            if (this.fullyCharged == false && this.power.PowerOn)
-            {
-                currentCapacitorCharge += chargeSpeed;
-
-                float excessPower = this.power.PowerNet.CurrentEnergyGainRate() / CompPower.WattsToWattDaysPerTick;
-                if (excessPower + (this.power.PowerNet.CurrentStoredEnergy() * 1000) > 5000)
+                // Handle quarterly ticks
+                Log.Warning("1");
+                if (++quarterLongTick == 4)
                 {
-                    // chargeSpeed += 5 - (this.chargeSpeed % 5);
-                    chargeSpeed = (int)Math.Round(this.power.PowerNet.CurrentStoredEnergy() * 0.25 / 10) / 2;
-                    this.updatePowerDrain();
-                }
-                else if (excessPower + (this.power.PowerNet.CurrentStoredEnergy() * 1000) > 1000)
-                {
-                    chargeSpeed += 1;
-                    this.updatePowerDrain();
-                }
-            }
-
-            if (this.fullyCharged == true)
-            {
-                bool hasNoPower = this.power.PowerNet == null || !this.power.PowerNet.HasActivePowerSource;
-                bool hasInsufficientPower = this.power.PowerOn == false;
-                if (hasNoPower || hasInsufficientPower)
-                {
-                    // Ignore power requirements during a solar flare.
-                    if (isSolarFlare)
+                    quarterLongTick = 0;
+                    if (this.Countdown > 0)
                     {
-                        return;
+                        Log.Warning("2");
+                        Messages.Message("Alert!! The Psionic Disruptor Countdown: " + this.Countdown, MessageTypeDefOf.ThreatBig);
+                        this.Countdown--;
+                        this.DoBlastVisual();
                     }
-
-                    return;
+                    else
+                    {
+                        Log.Warning("3");
+                        this.currentCapacitorCharge = 0;
+                        this.chargeSpeed = 1;
+                        this.Countdown = null;
+                        PsionicBlast.DoPsionicBlast();
+                        UpdateMapMeshDirty();
+                    }
                 }
+            }
+            else if (this.power.PowerOn) // Charging logic when not fully charged
+            {
+                // Increment charge
+                currentCapacitorCharge += chargeSpeed;
+                AdjustChargeSpeedBasedOnPower();
+            }
 
-                if (this.isPowerInited == false)
-                {
-                    this.isPowerInited = true;
-                    this.power.PowerOutput = -1000;
-                }
+            // // Check for power outage conditions when fully charged
+            // if (this.fullyCharged)
+            // {
+            //     bool hasNoPower = this.power.PowerNet == null || !this.power.PowerNet.HasActivePowerSource;
+            //     if (!this.HasSufficientPower() && !isSolarFlare)
+            //     {
+            //         return;
+            //     }
+            //
+            //     if (!this.isPowerInited)
+            //     {
+            //         this.isPowerInited = true;
+            //         this.power.PowerOutput = -1000;
+            //     }
+            // }
+        }
 
+        private void UpdateMapMeshDirty()
+        {
+        #if !RIMWORLD15
+            Find.CurrentMap.mapDrawer.MapMeshDirty(Position, MapMeshFlag.Things, true, false);
+        #else
+            Find.CurrentMap.mapDrawer.MapMeshDirty(Position, MapMeshFlagDefOf.Things, true, false);
+        #endif
+        }
+
+        private void AdjustChargeSpeedBasedOnPower()
+        {
+            float excessPower = this.power.PowerNet.CurrentEnergyGainRate() / CompPower.WattsToWattDaysPerTick;
+            float storedEnergy = this.power.PowerNet.CurrentStoredEnergy() * 1000;
+            if (excessPower + storedEnergy > 5000)
+            {
+                chargeSpeed += 5 - (this.chargeSpeed % 5) + (int)Math.Round(this.power.PowerNet.CurrentStoredEnergy() * 0.25 / 10) / 2;
+                this.updatePowerDrain();
+            }
+            else if (excessPower + storedEnergy > 1000)
+            {
+                chargeSpeed += 1;
+                this.updatePowerDrain();
+            }
+            else
+            {
+                this.chargeSpeed = 1;
             }
         }
 
-        private void DoPsionicBlast()
+        private bool HasSufficientPower()
         {
-            if (this.Warned == 0)
+            return this.power.PowerNet != null && this.power.PowerNet.HasActivePowerSource && this.power.PowerOn;
+        }
+
+        private void InitiatePsionicBlast()
+        {
+            if (this.Countdown == null)
             {
                 Messages.Message("Alert!! The Psionic Bomb has *harsh* consequences for all higher lifeforms on the map!", MessageTypeDefOf.ThreatBig);
-                this.Warned += 1;
-            }
-            else if (this.Warned == 1)
-            {
-                this.Warned += 1;
+                this.Countdown = 10;
             }
         }
 
@@ -250,7 +271,9 @@ namespace BetterRimworlds.PsionicBomb
             var cell = this.Position;
             // Mote mote = (Mote)ThingMaker.MakeThing(ThingDefOf.Mote_PsycastAreaEffect, null);
             Mote mote = (Mote)ThingMaker.MakeThing(ThingDefOf.Mote_Bombardment, null);
-            mote.Scale = 180f;
+            //mote.Scale = 180f + (this.Countdown );
+            // mote.Scale = (-80f * this.Countdown ?? 0) + 800f + 180f;
+            mote.Scale = (-100f * this.Countdown ?? 0) + 1000f + 180f;
             mote.rotationRate = Rand.Range(-3f, 3f);
             mote.exactPosition = cell.ToVector3Shifted() + new Vector3(Rand.Value - 0.5f, 0f, Rand.Value - 0.5f);
 
