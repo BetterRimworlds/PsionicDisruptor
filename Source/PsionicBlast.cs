@@ -10,6 +10,44 @@ namespace BetterRimworlds
 {
     public class PsionicBlast
     {
+        private static bool isWearingPsychicFoilHelmet(Pawn pawn)
+        {
+            return pawn?.apparel?.WornApparel?.Any(a => a.def.defName == "Apparel_PsychicFoilHelmet") ?? false;
+        }
+
+        private static bool isWearingMarineHelmet(Pawn pawn)
+        {
+            return pawn?.apparel?.WornApparel?.Any(
+                a => a.def.defName == "Apparel_PowerArmorHelmet" ||
+                            a.def.defName == "Apparel_ArmorHelmetRecon"
+            ) ?? false;
+        }
+
+        public static int calculateHelmetProtection(Pawn pawn)
+        {
+            if (pawn.apparel == null)
+            {
+                return 0;
+            }
+
+            if (isWearingPsychicFoilHelmet(pawn))
+            {
+                return 5;
+            }
+
+            // Add protection for any helmet.
+            foreach (Apparel apparel in pawn.apparel.WornApparel)
+            {
+                if (apparel.def.apparel.bodyPartGroups.Contains(BodyPartGroupDefOf.FullHead))
+                {
+                    //Log.Warning("Helmet name: " + apparel.def.defName);
+                    return isWearingMarineHelmet(pawn) ? 2 : 1;
+                }
+            }
+
+            return 0;
+        }
+
         public static void DoPsionicBlast()
         {
             foreach (Pawn pawn in Find.CurrentMap.mapPawns.AllPawns.ToArray())
@@ -62,8 +100,10 @@ namespace BetterRimworlds
                 psychicSensitivity = psychicSensitivityTrait.Degree;
             }
 
+            psychicSensitivity -= calculateHelmetProtection(pawn);
+
             // If they're Psychically Deaf, do nothing:
-            if (psychicSensitivity == -2)
+            if (psychicSensitivity <= -2)
             {
                 return;
             }
@@ -87,7 +127,7 @@ namespace BetterRimworlds
                     if (pawn.IsColonist)
                     {
                         Messages.Message(pawn.Name.ToStringShort + " was psychically supersensitive and died because of the psionic blast.", MessageTypeDefOf.ThreatSmall);
-                    } 
+                    }
 
                     HealthUtility.DamageUntilDead(pawn);
                 }
@@ -96,7 +136,7 @@ namespace BetterRimworlds
                     CauseCatatonia(pawn);
                 }
             }
-            
+
             // If they have a Bionic Heart, then skip but give them bad food poisoning instead.
             // bool hasBionicHeart = pawn.RaceProps.body.AllParts.Exists(bpr =>
             // {
@@ -107,22 +147,23 @@ namespace BetterRimworlds
             // });
             bool hasBionicHeart =
                 pawn.health.hediffSet.HasHediff(DefDatabase<HediffDef>.GetNamedSilentFail("BionicHeart"));
-            // if (pawn.IsColonist)
-            // {
-            //     Log.Error("Does " + pawn.Name + " have a bionic heart? " + hasBionicHeart);
-            // }
 
             if (shouldGiveHeartAttack != false && hasBionicHeart)
             {
                 shouldGiveHeartAttack = false;
             }
 
-            Hediff shock = HediffMaker.MakeHediff(HediffDefOf.PsychicShock, pawn, null);
-            pawn.health.AddHediff(shock, null, null);
+            // If they aren't wearing a Marine helmet, give them a psychic shock 100% of the time.
+            // If they are wearing a helmet, only shock them 50% of the time.
+            if (isWearingMarineHelmet(pawn) == false || rand.Next(0, 2) == 0)
+            {
+                Hediff shock = HediffMaker.MakeHediff(HediffDefOf.PsychicShock, pawn, null);
+                pawn.health.AddHediff(shock, null, null);
+            }
 
             if (shouldGiveHeartAttack == null)
             {
-                shouldGiveHeartAttack = rand.Next(1, 11) <= 3;
+                shouldGiveHeartAttack = rand.Next(1, 11) <= 4;
 
                 if (psychicSensitivity > 0 && shouldGiveHeartAttack == false)
                 {
@@ -139,7 +180,7 @@ namespace BetterRimworlds
             if (shouldSedate == null)
             {
                 int likelihood = rand.Next(1, 11);
-                shouldSedate = likelihood >= 6;
+                shouldSedate = likelihood >= 6 + (isWearingMarineHelmet(pawn) ? 2 : 0);
             }
 
             if (shouldSedate == true)
@@ -147,7 +188,7 @@ namespace BetterRimworlds
                 CauseSedation(pawn);
             }
 
-            DamageInfo psionicIntensity = new DamageInfo(DamageDefOf.Stun, 50);
+            DamageInfo psionicIntensity = new DamageInfo(DamageDefOf.Stun, 50 + (10 * psychicSensitivity));
             pawn.TakeDamage(psionicIntensity);
         }
 
