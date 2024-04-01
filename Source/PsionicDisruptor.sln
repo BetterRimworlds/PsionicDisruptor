@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30309.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBD}") = "PsionicBomb", "PsionicBomb.csproj", "{93C1DF77-FDA7-4093-8C7F-E80DCCB7F3EE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBD}") = "PsionicDisruptor", "PsionicDisruptor.csproj", "{93C1DF77-FDA7-4093-8C7F-E80DCCB7F3EE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

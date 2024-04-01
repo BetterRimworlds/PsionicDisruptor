@@ -7,8 +7,8 @@
     <ProjectGuid>{93C1DF77-FDA7-4093-8C7F-E80DCCB7F3EE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PsionicBomb</RootNamespace>
-    <AssemblyName>PsionicBomb</AssemblyName>
+    <RootNamespace>PsionicDisruptor</RootNamespace>
+    <AssemblyName>PsionicDisruptor</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -19,23 +19,23 @@
     <DefineConstants>RIMWORLD12</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <OutputPath>/rimworld/1.2/Mods/PsionicBomb/1.2/Assemblies</OutputPath>
-    <MainPath>/tmp/rimworld/1.2/Mods/PsionicBomb/1.2/Assemblies</MainPath>
+    <OutputPath>/rimworld/1.2/Mods/PsionicDisruptor/1.2/Assemblies</OutputPath>
+    <MainPath>/tmp/rimworld/1.2/Mods/PsionicDisruptor/1.2/Assemblies</MainPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release v1.3|AnyCPU' ">
     <DefineConstants>RIMWORLD13</DefineConstants>
-    <OutputPath>/rimworld/1.3/Mods/PsionicBomb/1.3/Assemblies</OutputPath>
-    <MainPath>/rimworld/1.2/Mods/PsionicBomb/1.3/Assemblies</MainPath>
+    <OutputPath>/rimworld/1.3/Mods/PsionicDisruptor/1.3/Assemblies</OutputPath>
+    <MainPath>/rimworld/1.2/Mods/PsionicDisruptor/1.3/Assemblies</MainPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release v1.4|AnyCPU' ">
     <DefineConstants>RIMWORLD14</DefineConstants>
-    <OutputPath>/rimworld/1.4/Mods/PsionicBomb/1.4/Assemblies</OutputPath>
-    <MainPath>/rimworld/1.2/Mods/PsionicBomb/1.4/Assemblies</MainPath>
+    <OutputPath>/rimworld/1.4/Mods/PsionicDisruptor/1.4/Assemblies</OutputPath>
+    <MainPath>/rimworld/1.2/Mods/PsionicDisruptor/1.4/Assemblies</MainPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release v1.5|AnyCPU' ">
     <DefineConstants>RIMWORLD15</DefineConstants>
-    <OutputPath>/rimworld/1.5/Mods/PsionicBomb/1.5/Assemblies</OutputPath>
-    <MainPath>/rimworld/1.2/Mods/PsionicBomb/1.5/Assemblies</MainPath>
+    <OutputPath>/rimworld/1.5/Mods/PsionicDisruptor/1.5/Assemblies</OutputPath>
+    <MainPath>/rimworld/1.2/Mods/PsionicDisruptor/1.5/Assemblies</MainPath>
   </PropertyGroup>
 
   <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Release v1.2|AnyCPU' ">
@@ -130,11 +130,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Building_PsionicBomb.cs" />
+    <Compile Include="Building_PsionicDisruptor.cs" />
     <Compile Include="PlaceWorker_OnlyOneBuilding.cs" />
-    <Compile Include="PlaceWorker_OnlyOnePsionicBomb.cs" />
+    <Compile Include="PlaceWorker_OnlyOnePsionicDisruptor.cs" />
     <Compile Include="PsionicBlast.cs" />
-    <Compile Include="PsionicBombThingDef.cs" />
+    <Compile Include="PsionicDisruptorThingDef.cs" />
     <Compile Include="Utilities\FindingThings.cs" />
   </ItemGroup>
   <ItemGroup />
@@ -143,7 +143,7 @@
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition=" '$(OS)' != 'Windows_NT' ">
     <PropertyGroup>
-      <FilesSource>$(ProjectDir)..\PsionicBomb</FilesSource>
+      <FilesSource>$(ProjectDir)..\PsionicDisruptor</FilesSource>
       <FilesDestination>$(OutputPath)..</FilesDestination>
     </PropertyGroup>
     <Exec Command="cp -rvf $(FilesSource)/* '$(FilesDestination)/../'" />

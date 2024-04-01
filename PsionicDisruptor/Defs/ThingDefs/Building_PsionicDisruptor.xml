@@ -9,12 +9,12 @@
         <repairEffect>Repair</repairEffect>
     </ThingDef>
 
-    <ThingDef Class="BetterRimworlds.PsionicBomb.PsionicBombThingDef" ParentName="BuildingBase">
-        <defName>BRW_PsionicBombCaster</defName>
-        <label>Psionic Bomb Caster</label>
-        <thingClass>BetterRimworlds.PsionicBomb.Building_PsionicBomb</thingClass>
+    <ThingDef Class="BetterRimworlds.PsionicDisruptor.PsionicDisruptorThingDef" ParentName="BuildingBase">
+        <defName>BRW_PsionicDisruptor</defName>
+        <label>Psionic Disruptor</label>
+        <thingClass>BetterRimworlds.PsionicDisruptor.Building_PsionicDisruptor</thingClass>
         <graphicData>
-            <texPath>Things/Buildings/PsionicBomb</texPath>
+            <texPath>Things/Buildings/PsionicDisruptor</texPath>
             <graphicClass>Graphic_Single</graphicClass>
             <drawSize>(3,3)</drawSize>
         </graphicData>
@@ -30,9 +30,9 @@
             <MaxHitPoints>1000</MaxHitPoints>
             <Flammability>0.0</Flammability>
         </statBases>
-        <description>Psionic Disrupter</description>
+        <description>Psionic Disruptor</description>
         <researchPrerequisites>
-            <li>BRW_PsionicBomb</li>
+            <li>BRW_PsionicDisruptor</li>
         </researchPrerequisites>
         <comps>
             <li Class="CompProperties_Power">
@@ -40,7 +40,7 @@
                 <shortCircuitInRain>false</shortCircuitInRain>
                 <basePowerConsumption>1000</basePowerConsumption>
             </li>
-<!--            <li Class="CompProperties_Flickable"/>-->
+            <li Class="CompProperties_Flickable"/>
         </comps>
         <size>(3,3)</size>
         <costList>
@@ -60,7 +60,7 @@
         <staticSunShadowHeight>0.75</staticSunShadowHeight>
         <leaveResourcesWhenKilled>true</leaveResourcesWhenKilled>
         <placeWorkers>
-            <li>BetterRimworlds.PsionicBomb.PlaceWorker_OnlyOnePsionicBomb</li>
+            <li>BetterRimworlds.PsionicDisruptor.PlaceWorker_OnlyOnePsionicDisruptor</li>
         </placeWorkers>
     </ThingDef>
 </Defs>

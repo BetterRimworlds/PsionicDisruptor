@@ -11,7 +11,7 @@ fi
 dir="./Source"
 
 # Define the path to your solution file
-solutionPath="Source/PsionicBomb.sln"
+solutionPath="Source/PsionicDisruptor.sln"
 
 # Define an array of configurations
 configurations=("Release v1.2" "Release v1.3" "Release v1.4" "Release v1.5")

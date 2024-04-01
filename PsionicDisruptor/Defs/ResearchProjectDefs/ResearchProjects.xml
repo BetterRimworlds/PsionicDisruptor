@@ -4,7 +4,7 @@
         <defName>BRW_PsionicBatteries</defName>
         <label>Psionic Batteries</label>
         <description>Learn to store and harness psionic energy from your Psionically-Sensitive citizens.
-        
+
 www.glitterworlds.dev</description>
         <baseCost>5000</baseCost>
         <techLevel>Spacer</techLevel>
@@ -16,8 +16,8 @@ www.glitterworlds.dev</description>
         <tab>GlitterWorlds</tab>
     </ResearchProjectDef>
     <ResearchProjectDef>
-        <defName>BRW_PsionicBomb</defName>
-        <label>Psionic Bomb</label>
+        <defName>BRW_PsionicDisruptor</defName>
+        <label>Psionic Disruptor</label>
         <description>Creates an ultra-devstating psionic blast that does terrible things to every human and animal who is not psychically numb or deaf,
 or protected in some way.
 
@@ -38,7 +38,7 @@ www.glitterworlds.dev</description>
     <ResearchProjectDef>
         <defName>PsionicBlastProtect</defName>
         <label>Psionic Blast Protection</label>
-        <description>Research a defensive protection against the effects of the Psionic Bomb.
+        <description>Research a defensive protection against the effects of the Psionic Disruptor.
 
 www.glitterworlds.dev</description>
         <baseCost>10000</baseCost>
@@ -50,7 +50,7 @@ www.glitterworlds.dev</description>
         </requiredResearchFacilities>
         <prerequisites>
             <li>AdvancedFabrication</li>
-            <li>BRW_PsionicBomb</li>
+            <li>BRW_PsionicDisruptor</li>
         </prerequisites>
         <tab>GlitterWorlds</tab>
     </ResearchProjectDef>

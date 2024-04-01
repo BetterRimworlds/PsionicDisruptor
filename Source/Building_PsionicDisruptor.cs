@@ -1,10 +1,10 @@
 /*
- * This file is part of PsionicBomb, a Better Rimworlds Project.
+ * This file is part of PsionicDisruptor, a Better Rimworlds Project.
  *
  * Copyright © 2024 Theodore R. Smith
  * Author: Theodore R. Smith <hopeseekr@gmail.com>
  *   GPG Fingerprint: D8EA 6E4D 5952 159D 7759  2BB4 EEB6 CE72 F441 EC41
- *   https://github.com/BetterRimworlds/PsionicBomb
+ *   https://github.com/BetterRimworlds/PsionicDisruptor
  *
  * This file is licensed under the Creative Commons No-Derivations v4.0 License.
  * Most rights are reserved.
@@ -17,10 +17,10 @@ using Verse;
 using UnityEngine;
 using RimWorld;
 
-namespace BetterRimworlds.PsionicBomb
+namespace BetterRimworlds.PsionicDisruptor
 {
     [StaticConstructorOnStartup]
-    class Building_PsionicBomb : Building
+    class Building_PsionicDisruptor : Building
     {
         private int? Countdown = null;
         private int quarterLongTick = 0;
@@ -40,16 +40,16 @@ namespace BetterRimworlds.PsionicBomb
 
         protected Map currentMap;
 
-        static Building_PsionicBomb()
+        static Building_PsionicDisruptor()
         {
             UI_DETONATE = ContentFinder<Texture2D>.Get("UI/Detonate", true);
 
         #if RIMWORLD12
-            GraphicRequest requestActive = new GraphicRequest(Type.GetType("Graphic_Single"), "Things/Buildings/PsionicBomb-Active", ShaderDatabase.DefaultShader, new Vector2(3, 3), Color.white, Color.white, new GraphicData(), 0, null);
-            GraphicRequest requestInactive = new GraphicRequest(Type.GetType("Graphic_Single"), "Things/Buildings/PsionicBomb", ShaderDatabase.DefaultShader, new Vector2(3, 3), Color.white, Color.white, new GraphicData(), 0, null);
+            GraphicRequest requestActive = new GraphicRequest(Type.GetType("Graphic_Single"), "Things/Buildings/PsionicDisruptor-Active", ShaderDatabase.DefaultShader, new Vector2(3, 3), Color.white, Color.white, new GraphicData(), 0, null);
+            GraphicRequest requestInactive = new GraphicRequest(Type.GetType("Graphic_Single"), "Things/Buildings/PsionicDisruptor", ShaderDatabase.DefaultShader, new Vector2(3, 3), Color.white, Color.white, new GraphicData(), 0, null);
         #else
-            GraphicRequest requestActive = new GraphicRequest(Type.GetType("Graphic_Single"), "Things/Buildings/PsionicBomb-Active",   ShaderDatabase.DefaultShader, new Vector2(3, 3), Color.white, Color.white, new GraphicData(), 0, null, null);
-            GraphicRequest requestInactive = new GraphicRequest(Type.GetType("Graphic_Single"), "Things/Buildings/PsionicBomb", ShaderDatabase.DefaultShader, new Vector2(3, 3), Color.white, Color.white, new GraphicData(), 0, null, null);
+            GraphicRequest requestActive = new GraphicRequest(Type.GetType("Graphic_Single"), "Things/Buildings/PsionicDisruptor-Active",   ShaderDatabase.DefaultShader, new Vector2(3, 3), Color.white, Color.white, new GraphicData(), 0, null, null);
+            GraphicRequest requestInactive = new GraphicRequest(Type.GetType("Graphic_Single"), "Things/Buildings/PsionicDisruptor", ShaderDatabase.DefaultShader, new Vector2(3, 3), Color.white, Color.white, new GraphicData(), 0, null, null);
         #endif
 
             graphicActive = new Graphic_Single();
@@ -63,7 +63,7 @@ namespace BetterRimworlds.PsionicBomb
         {
             this.currentMap = map;
             this.power = base.GetComp<CompPowerTrader>();
-            this.currentGraphic = this.fullyCharged ?  Building_PsionicBomb.graphicActive : Building_PsionicBomb.graphicInactive;
+            this.currentGraphic = this.fullyCharged ?  Building_PsionicDisruptor.graphicActive : Building_PsionicDisruptor.graphicInactive;
 
             base.SpawnSetup(map, respawningAfterLoad);
         }
@@ -141,7 +141,7 @@ namespace BetterRimworlds.PsionicBomb
         public override void Tick()
         {
             base.Tick();
-            // this.currentGraphic = this.fullyCharged ?  Building_PsionicBomb.graphicActive : Building_PsionicBomb.graphicInactive;
+            // this.currentGraphic = this.fullyCharged ?  Building_PsionicDisruptor.graphicActive : Building_PsionicDisruptor.graphicInactive;
 
             if (Find.TickManager.TicksGame % 250 == 0)
             {
@@ -261,7 +261,7 @@ namespace BetterRimworlds.PsionicBomb
         {
             if (this.Countdown == null)
             {
-                Messages.Message("Alert!! The Psionic Bomb has *harsh* consequences for all higher lifeforms on the map!", MessageTypeDefOf.ThreatBig);
+                Messages.Message("Alert!! The Psionic Disruptor has *harsh* consequences for all higher lifeforms on the map!", MessageTypeDefOf.ThreatBig);
                 this.Countdown = 10;
             }
         }
@@ -271,14 +271,13 @@ namespace BetterRimworlds.PsionicBomb
             var cell = this.Position;
             // Mote mote = (Mote)ThingMaker.MakeThing(ThingDefOf.Mote_PsycastAreaEffect, null);
             Mote mote = (Mote)ThingMaker.MakeThing(ThingDefOf.Mote_Bombardment, null);
-            //mote.Scale = 180f + (this.Countdown );
             // mote.Scale = (-80f * this.Countdown ?? 0) + 800f + 180f;
             mote.Scale = (-100f * this.Countdown ?? 0) + 1000f + 180f;
             mote.rotationRate = Rand.Range(-3f, 3f);
             mote.exactPosition = cell.ToVector3Shifted() + new Vector3(Rand.Value - 0.5f, 0f, Rand.Value - 0.5f);
 
-            mote.instanceColor = new Color(0, 120/255.0f, 1.0f);
-            // moteThrown.instanceColor = new Color(0.368f, 0f, 1f);
+            // mote.instanceColor = new Color(0, 120/255.0f, 1.0f);
+            mote.instanceColor = new Color(0.368f, 0f, 1f);
 
             GenSpawn.Spawn((Thing) mote, cell, this.Map);
             // var cell = this.Position;
@@ -296,7 +295,6 @@ namespace BetterRimworlds.PsionicBomb
 
         #endregion
 
-        #region Graphics-text
         public override Graphic Graphic
         {
             get
@@ -307,13 +305,12 @@ namespace BetterRimworlds.PsionicBomb
                 // return this.currentGraphic;
                 if (this.currentCapacitorCharge < 20000f)
                 {
-                    return Building_PsionicBomb.graphicInactive;
+                    return Building_PsionicDisruptor.graphicInactive;
                 }
 
-                return Building_PsionicBomb.graphicActive;
+                return Building_PsionicDisruptor.graphicActive;
             }
         }
-        #endregion
 
         public bool UpdateRequiredPower(float extraPower)
         {
