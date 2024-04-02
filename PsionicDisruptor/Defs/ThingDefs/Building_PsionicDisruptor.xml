@@ -24,7 +24,7 @@
         <fillPercent>1</fillPercent>
         <specialDisplayRadius>3</specialDisplayRadius>
         <tickerType>Rare</tickerType>
-<!--        <tickerType>Normal</tickerType>-->
+        <!--<tickerType>Normal</tickerType>-->
         <statBases>
             <WorkToBuild>25000</WorkToBuild>
             <MaxHitPoints>1000</MaxHitPoints>

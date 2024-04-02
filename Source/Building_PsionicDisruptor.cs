@@ -1,5 +1,5 @@
 /*
- * This file is part of PsionicDisruptor, a Better Rimworlds Project.
+ * This file is part of Psionic Disruptor, a Better Rimworlds Project.
  *
  * Copyright © 2024 Theodore R. Smith
  * Author: Theodore R. Smith <hopeseekr@gmail.com>
@@ -12,7 +12,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Verse;
 using UnityEngine;
 using RimWorld;
@@ -124,14 +123,13 @@ namespace BetterRimworlds.PsionicDisruptor
             if (this.fullyCharged == true)
             {
                 Command_Action act = new Command_Action();
-                //act.action = () => Designator_Deconstruct.DesignateDeconstruct(this);
                 act.action = this.InitiatePsionicBlast;
                 act.icon = UI_DETONATE;
                 act.defaultLabel = "Detonate";
                 act.defaultDesc = "Detonate";
                 act.activateSound = SoundDef.Named("Click");
-                //act.hotKey = KeyBindingDefOf.DesignatorDeconstruct;
-                //act.groupKey = 689736;
+                act.hotKey = KeyBindingDefOf.Designator_Deconstruct;
+                act.groupKey = 689736;
                 yield return act;
             }
 
@@ -141,7 +139,6 @@ namespace BetterRimworlds.PsionicDisruptor
         public override void Tick()
         {
             base.Tick();
-            // this.currentGraphic = this.fullyCharged ?  Building_PsionicDisruptor.graphicActive : Building_PsionicDisruptor.graphicInactive;
 
             if (Find.TickManager.TicksGame % 250 == 0)
             {
@@ -159,7 +156,7 @@ namespace BetterRimworlds.PsionicDisruptor
             // Initialize charge speed if not charging and not fully charged
             if (this.chargeSpeed == 0 && !this.fullyCharged) this.chargeSpeed = 1;
 
-            if (this.fullyCharged)
+            if (this.fullyCharged || isSolarFlare)
             {
                 // Reset current charge if needed and update power drain
                 if (this.chargeSpeed != 0)
@@ -278,12 +275,6 @@ namespace BetterRimworlds.PsionicDisruptor
             mote.instanceColor = new Color(0.368f, 0f, 1f);
 
             GenSpawn.Spawn((Thing) mote, cell, this.Map);
-            // var cell = this.Position;
-        //     Mote newThing = (Mote) ThingMaker.MakeThing(ThingDefOf.Mote_PowerBeam);
-        //     newThing.exactPosition = cell.ToVector3Shifted();
-        //     newThing.Scale = 90f;
-        //     newThing.rotationRate = 1.2f;
-        //     GenSpawn.Spawn((Thing) newThing, cell, this.Map);
         }
 
         private void updatePowerDrain()
@@ -297,10 +288,6 @@ namespace BetterRimworlds.PsionicDisruptor
         {
             get
             {
-                // return this.currentGraphic;
-                //if (this.fullyCharged == true)
-                // Log.Error("Current charge: " + this.currentCapacitorCharge);
-                // return this.currentGraphic;
                 if (this.currentCapacitorCharge < PsionicDisruptor.Settings.requiredCapacitorCharge)
                 {
                     return Building_PsionicDisruptor.graphicInactive;

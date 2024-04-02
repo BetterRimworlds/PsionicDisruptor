@@ -1,32 +1,49 @@
-# Rimworld Dematerializer
+# Better Rimworlds Psionic Disruptor
 
-![DeMaterializer](https://raw.githubusercontent.com/BetterRimworlds/Dematerializer/trunk/Dematerializer/About/Preview.png)
+![DeMaterializer](https://raw.githubusercontent.com/BetterRimworlds/PsionicDisruptor/trunk/PsionicDisruptor/About/Preview.png)
 
-The Dematerializer building allows you to teleport materials and pawns on the current map directly into the 
-Dematerializer buffer, where the items and pawns will remain in suspended animation indefinitely, as long
-as there is power in the subspace capacitors.
+The Psionic Disruptor is a premier defense weapon against all humanoid raiders and other undesirables.
 
-Every 1 kg stored in the buffer requires 2 kW of energy to maintain. On power loss, the least massive items
-will be lost to subspace until power is restored.
+However, if not protected with a some sort of Helmet, your colonists and animals will be affected, too.
 
-When solar storms occur, the Dematerializer is fully powered by the solar wind.
+**ALERT: The Psionic Disruptor has *harsh* consequences for all higher lifeforms on the map!**
+
+## Exposure Effects ##
+
+* **Psychic Shock:** Everyone without a helmet
+* **Coma (12-24h):** 33% chance (75% chance if psychically sensitive).
+* **Heart Attack:** 25% chance (50% chance if psychically sensitive; 0% chance if bionic heart).
+* **Psychic Hangover:** 50% chance for psychically dull.
+* **Psychically Deaf** and those wearing **Psychic Tinfoil Helmet** are 100% immune to the effects.
+* **Any helmet** reduces the effects by 25-75%, depending on the class of helmet.
 
 ## Change Log
 
-**v1.0.0: 2024-03-09**
-* Initial Release
+**v1.0.0: 2024-04-02**
+
+* **[2024-04-02 07:30:49 CDT]** Put various options into Mod Settings. HEAD -> trunk, origin/trunk
+* **[2024-03-31 20:52:57 CDT]** Renamed to the Psionic Disruptor.
+* **[2024-03-31 10:02:04 CDT]** Impleneted a Countdown system before detonation.
+* **[2024-03-31 09:57:23 CDT]** Reduced the effects of the Psionic Disrupter when a pawn is wearing a helmet.
+* **[2024-03-30 14:41:24 CDT]** Added watches to the build script so that it builds automagically.
+* **[2024-03-30 14:21:51 CDT]** Added a build script that builds for all versions of Rimworld simultaneously.
+* **[2024-03-30 14:21:23 CDT]** Added support for Rimworld v1.5.
+* **[2024-03-30 13:45:36 CDT]** Further shored up various aspects of the machine.
+* **[2024-03-28 19:34:12 CDT]** Initial: v0.9.0.
 
 ## Better Rimworlds Stargate Mods
 
 1. [**Stargate**](https://github.com/BetterRimworlds/Stargate) — Send Pawns and Items to other Savegames on the same computer.
-2. [**CryoRegenesis**](https://github.com/BetterRimworlds/CryoRegenesis) — Forever Young Glittertech (a Rimworld take on the Goa'uld Sarcophagus).
-3. [**ZPM**](https://github.com/BetterRimworlds/ZPM) — Build your own or buy an Archotech Zero-Point Module (Stargate Atlantis).
-4. [**ZatGun**](https://github.com/BetterRimworlds/ZatGun) — An actual Zat'nik'tel, from the Stargate Universe. One shot stuns. Two shots kills.
+2. [**Stargate**](https://github.com/BetterRimworlds/Dematerializer) — Teleport any pawn(s) from anywhere on the map and store their energy signature indefinitely.
+3. [**CryoRegenesis**](https://github.com/BetterRimworlds/CryoRegenesis) — Forever Young Glittertech (a Rimworld take on the Goa'uld Sarcophagus).
+4. [**ZPM**](https://github.com/BetterRimworlds/ZPM) — Build your own or buy an Archotech Zero-Point Module (Stargate Atlantis).
+5. [**ZatGun**](https://github.com/BetterRimworlds/ZatGun) — An actual Zat'nik'tel, from the Stargate Universe. One shot stuns. Two shots kills.
 
 ## Other Better Rimworlds Mods
 
-1. [**WakeUp Implant**](https://github.com/BetterRimworlds/WakeUpImplant) — Installs a brain implant that gives the effects of a permanent wakeup high.
-2. [**Savegame Shrinker**]() — Cleans up unnecessary data from long-running Savegames.
+1. [**Uplifted Animals**](https://github.com/BetterRimworlds/UpliftedAnimals) — ALZ-112: A neurogenerative mRNA drug that can cure neurodegenerative conditions and uplift animals.
+2. [**WakeUp Implant**](https://github.com/BetterRimworlds/WakeUpImplant) — Installs a brain implant that gives the effects of a permanent wakeup high.
+3. [**Savegame Shrinker**]() — Cleans up unnecessary data from long-running Savegames.
 
 ## Contributors
 
