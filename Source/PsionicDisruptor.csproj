@@ -134,7 +134,9 @@
     <Compile Include="PlaceWorker_OnlyOneBuilding.cs" />
     <Compile Include="PlaceWorker_OnlyOnePsionicDisruptor.cs" />
     <Compile Include="PsionicBlast.cs" />
+    <Compile Include="PsionicDisruptor.cs" />
     <Compile Include="PsionicDisruptorThingDef.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="Utilities\FindingThings.cs" />
   </ItemGroup>
   <ItemGroup />

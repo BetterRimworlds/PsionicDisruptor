@@ -23,7 +23,7 @@ namespace BetterRimworlds.PsionicDisruptor
     class Building_PsionicDisruptor : Building
     {
         private int? Countdown = null;
-        private int quarterLongTick = 0;
+        private int longerTickCounter = 0;
 
         protected static Texture2D UI_DETONATE;
 
@@ -33,9 +33,9 @@ namespace BetterRimworlds.PsionicDisruptor
         CompPowerTrader power;
         // CompProperties_Power powerProps;
 
-        int currentCapacitorCharge = 1000;
-        readonly int requiredCapacitorCharge = 20000;
-        int chargeSpeed = 1;
+        private int currentCapacitorCharge = 1000;
+        private int requiredCapacitorCharge = PsionicDisruptor.Settings.requiredCapacitorCharge;
+        private int chargeSpeed = 1;
         private Graphic currentGraphic;
 
         protected Map currentMap;
@@ -152,9 +152,9 @@ namespace BetterRimworlds.PsionicDisruptor
 
         public override void TickRare()
         {
-            Log.Warning("===== PSIONIC COUNTDOWN: " + this.Countdown);
             base.TickRare();
             var isSolarFlare = this.detectSolarFlare();
+            requiredCapacitorCharge = PsionicDisruptor.Settings.requiredCapacitorCharge;
 
             // Initialize charge speed if not charging and not fully charged
             if (this.chargeSpeed == 0 && !this.fullyCharged) this.chargeSpeed = 1;
@@ -177,20 +177,18 @@ namespace BetterRimworlds.PsionicDisruptor
                 }
 
                 // Handle quarterly ticks
-                Log.Warning("1");
-                if (++quarterLongTick == 4)
+                //Log.Warning("1 "  + this.longerTickCounter + " | "  + PsionicDisruptor.Settings.countdownSpeed);
+                if (++this.longerTickCounter >= PsionicDisruptor.Settings.countdownSpeed)
                 {
-                    quarterLongTick = 0;
+                    this.longerTickCounter = 0;
                     if (this.Countdown > 0)
                     {
-                        Log.Warning("2");
                         Messages.Message("Alert!! The Psionic Disruptor Countdown: " + this.Countdown, MessageTypeDefOf.ThreatBig);
                         this.Countdown--;
                         this.DoBlastVisual();
                     }
                     else
                     {
-                        Log.Warning("3");
                         this.currentCapacitorCharge = 0;
                         this.chargeSpeed = 1;
                         this.Countdown = null;
@@ -303,7 +301,7 @@ namespace BetterRimworlds.PsionicDisruptor
                 //if (this.fullyCharged == true)
                 // Log.Error("Current charge: " + this.currentCapacitorCharge);
                 // return this.currentGraphic;
-                if (this.currentCapacitorCharge < 20000f)
+                if (this.currentCapacitorCharge < PsionicDisruptor.Settings.requiredCapacitorCharge)
                 {
                     return Building_PsionicDisruptor.graphicInactive;
                 }
