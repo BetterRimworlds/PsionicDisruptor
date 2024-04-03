@@ -257,7 +257,7 @@ namespace BetterRimworlds.PsionicDisruptor
             if (this.Countdown == null)
             {
                 Messages.Message("Alert!! The Psionic Disruptor has *harsh* consequences for all higher lifeforms on the map!", MessageTypeDefOf.ThreatBig);
-                this.Countdown = 10;
+                this.Countdown = PsionicDisruptor.Settings.countdown;
             }
         }
 

@@ -17,11 +17,13 @@ namespace BetterRimworlds.PsionicDisruptor
 {
     public class Settings: ModSettings
     {
+        public int countdown = 5;
         public int countdownSpeed = 4;
         public int requiredCapacitorCharge = 20000;
 
         public override void ExposeData()
         {
+            Scribe_Values.Look(ref countdown,               "brw.psionicdisruptor.count", 5);
             Scribe_Values.Look(ref countdownSpeed,          "brw.psionicdisruptor.countdownspeed", 4);
             Scribe_Values.Look(ref requiredCapacitorCharge, "brw.cryoregenesis.requiredCapacitorCharge", 20000);
         }
@@ -32,6 +34,7 @@ namespace BetterRimworlds.PsionicDisruptor
             listing_Standard.Begin(inRect);
 
             string[] labels = {
+                "Countdown Count",
                 "Countdown speed (lower is faster; 1=250 ticks):",
                 "Required capacitor charge? ",
             };
@@ -39,8 +42,10 @@ namespace BetterRimworlds.PsionicDisruptor
             // targetAge = listing_Standard.TextEntryLabeled(labels[0], targetAge.ToString());
             string buffer = null;
             string buffer2 = null;
-            listing_Standard.TextFieldNumericLabeled<int>(labels[0], ref countdownSpeed, ref buffer);
-            listing_Standard.TextFieldNumericLabeled<int>(labels[1], ref requiredCapacitorCharge, ref buffer2);
+            string buffer3 = null;
+            listing_Standard.TextFieldNumericLabeled<int>(labels[0], ref countdown, ref buffer);
+            listing_Standard.TextFieldNumericLabeled<int>(labels[0], ref countdownSpeed, ref buffer2);
+            listing_Standard.TextFieldNumericLabeled<int>(labels[1], ref requiredCapacitorCharge, ref buffer3);
 
             listing_Standard.End();
         }
