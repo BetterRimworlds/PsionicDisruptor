@@ -10,9 +10,8 @@
  * Most rights are reserved.
  */
 
-namespace BetterRimworlds.PsionicDisruptor
+namespace BetterRimworlds.PsionicDisruptor;
+
+public class PsionicDisruptorThingDef : Verse.ThingDef
 {
-    public class PsionicDisruptorThingDef : Verse.ThingDef
-    {
-    }
 }

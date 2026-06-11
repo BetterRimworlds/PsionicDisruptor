@@ -13,25 +13,24 @@
 using System.Collections.Generic;
 using Verse;
 
-namespace BetterRimworlds.PsionicDisruptor
-{
-    class PlaceWorker_OnlyOnePsionicDisruptor : PlaceWorker_OnlyOneBuilding
-    {
-        public override AcceptanceReport AllowsPlacing(BuildableDef checkingDef, IntVec3 loc, Rot4 rot, Map map, Thing thingToIgnore = null, Thing thing = null)
-        {
-            List<Thing> blueprints = map.listerThings.ThingsOfDef(checkingDef.blueprintDef);
-            List<Thing> frames = map.listerThings.ThingsOfDef(checkingDef.frameDef);
-            if (
-                ((blueprints != null) && (blueprints.Count > 0))
-               || ((frames != null) && (frames.Count > 0))
-               || map.listerBuildings.ColonistsHaveBuilding(ThingDef.Named(checkingDef.defName))
-               || map.listerBuildings.ColonistsHaveBuilding(ThingDef.Named("BRW_PsionicDisruptor"))
-               )
-            {
-                return "You can only build one Psionic Disruptor per map.";
-            }
+namespace BetterRimworlds.PsionicDisruptor;
 
-            return true;
+class PlaceWorker_OnlyOnePsionicDisruptor : PlaceWorker_OnlyOneBuilding
+{
+    public override AcceptanceReport AllowsPlacing(BuildableDef checkingDef, IntVec3 loc, Rot4 rot, Map map, Thing thingToIgnore = null, Thing thing = null)
+    {
+        List<Thing> blueprints = map.listerThings.ThingsOfDef(checkingDef.blueprintDef);
+        List<Thing> frames = map.listerThings.ThingsOfDef(checkingDef.frameDef);
+        if (
+            ((blueprints != null) && (blueprints.Count > 0))
+            || ((frames != null) && (frames.Count > 0))
+            || map.listerBuildings.ColonistsHaveBuilding(ThingDef.Named(checkingDef.defName))
+            || map.listerBuildings.ColonistsHaveBuilding(ThingDef.Named("BRW_PsionicDisruptor"))
+            )
+        {
+            return "You can only build one Psionic Disruptor per map.";
         }
+
+        return true;
     }
 }
