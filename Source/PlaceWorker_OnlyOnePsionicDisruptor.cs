@@ -10,7 +10,6 @@
  * Most rights are reserved.
  */
 
-using System.Collections.Generic;
 using Verse;
 
 namespace BetterRimworlds.PsionicDisruptor;

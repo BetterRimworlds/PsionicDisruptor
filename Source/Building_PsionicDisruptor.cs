@@ -10,8 +10,6 @@
  * Most rights are reserved.
  */
 
-using System;
-using System.Collections.Generic;
 using Verse;
 using UnityEngine;
 using RimWorld;
@@ -87,7 +85,7 @@ class Building_PsionicDisruptor : Building
 
     private bool detectSolarFlare()
     {
-        #if RIMWORLD15
+        #if RIMWORLD15 || RIMWORLD16
         // Solar flares do not exist in Rimworld v1.5.
         var solarFlareDef = DefDatabase<GameConditionDef>.GetNamed("SolarFlare");
         bool isSolarFlare = this.currentMap.gameConditionManager.ConditionIsActive(solarFlareDef);
@@ -136,7 +134,11 @@ class Building_PsionicDisruptor : Building
         // +57 319-666-8030
     }
 
+#if RIMWORLD16
+protected override void Tick()
+#else
     public override void Tick()
+#endif
     {
         base.Tick();
 
@@ -220,7 +222,7 @@ class Building_PsionicDisruptor : Building
 
     private void UpdateMapMeshDirty()
     {
-    #if !RIMWORLD15
+    #if !RIMWORLD15 && !RIMWORLD16
         Find.CurrentMap.mapDrawer.MapMeshDirty(Position, MapMeshFlag.Things, true, false);
     #else
         Find.CurrentMap.mapDrawer.MapMeshDirty(Position, MapMeshFlagDefOf.Things, true, false);
